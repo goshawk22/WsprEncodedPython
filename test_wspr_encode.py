@@ -1,8 +1,6 @@
 #!/usr/bin/env -S python -u
 
 import sys
-
-sys.path.append('.')
 import WsprEncodedPython
 
 # // Create User-Defined Telemetry object for the number of

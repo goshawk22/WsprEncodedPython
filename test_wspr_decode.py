@@ -1,8 +1,6 @@
 #!/usr/bin/env -S python
 
 import sys
-
-sys.path.append('.')
 import WsprEncodedPython
 
 

@@ -36,22 +36,16 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y ninja-build cmake build-essential gcc g++ python3 python3-pip
           elif [[ "${{ matrix.os }}" == "windows-latest" ]] && [[ "${{ matrix.compiler }}" == "mingw" ]]; then
-            echo "Installing Chocolatey..."
-            powershell -NoProfile -ExecutionPolicy Bypass -Command "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
-
             choco install ninja cmake python --confirm
 
             curl -L -o msys2-installer.exe https://github.com/msys2/msys2-installer/releases/download/nightly-x86_64/msys2-x86_64-latest.exe
-            msys2-installer.exe --confirm-command --accept-messages --root C:/msys64
+            ./msys2-installer.exe --confirm-command --accept-messages --accept-licenses --root C:/msys64
 
             export PATH="/c/msys64/usr/bin:$PATH"
             pacman -Syu --noconfirm
             pacman -Su --noconfirm
             pacman -S --noconfirm mingw-w64-x86_64-gcc mingw-w64-x86_64-python
           elif [[ "${{ matrix.os }}" == "windows-latest" ]] && [[ "${{ matrix.compiler }}" == "msvc" ]]; then
-            echo "Installing Chocolatey..."
-            powershell -NoProfile -ExecutionPolicy Bypass -Command "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
-
             choco install ninja cmake python --confirm
 
             choco install visualstudio2022buildtools --confirm
@@ -108,9 +102,7 @@ jobs:
           find ./prebuilt
           cp -r ./artifacts/*/* ./prebuilt/
           git add prebuilt
-          echo "pre-commit"
           git commit -m "Add prebuilt DLLs for all builds" || echo "=== No changes to commit ==="
-          echo "pre-push"
           git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           git push origin main
 

@@ -29,7 +29,7 @@ link_directories(${Python3_LIBRARY_DIRS})
 
 # Learn the Python site-packages directory
 execute_process(
-  COMMAND ${Python3_EXECUTABLE} -c "import site; print(site.getsitepackages()[0])"
+  COMMAND ${Python3_EXECUTABLE} -m site --user-site
   RESULT_VARIABLE result
   OUTPUT_VARIABLE SITE_PACKAGES_PATH
   OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -55,6 +55,9 @@ FetchContent_MakeAvailable(pybind11)
 pybind11_add_module(WsprEncodedPython WsprEncodedPython.cpp)
 target_link_libraries(WsprEncodedPython PRIVATE
     WsprEncoded
+)
+target_compile_definitions(WsprEncodedPython PRIVATE
+    Py_ENABLE_SHARED
 )
 
 

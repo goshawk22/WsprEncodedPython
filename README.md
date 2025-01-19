@@ -8,7 +8,7 @@ Quickstart:
 # Get a copy of the repo
 git clone https://github.com/traquito/WsprEncodedPython.git
 
-# Build and Install
+# Configure, Build, and Install
 cd WsprEncodedPython
 ./configure.sh
 ./build.sh
@@ -19,6 +19,8 @@ cd WsprEncodedPython
 ./test_wspr_decode.py
 ```
 
-See the website for more details.
+Depends on [CMake](https://cmake.org/download/) and [Ninja](https://ninja-build.org/) being installed.
+
+See the website for more details on library use.
 
 https://traquito.github.io/pro/telemetry/code

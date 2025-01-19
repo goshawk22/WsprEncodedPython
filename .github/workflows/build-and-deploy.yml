@@ -1,0 +1,116 @@
+name: Build DLL for Windows and Linux
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+        compiler: [msvc, mingw, gcc]
+        exclude:
+          - os: windows-latest
+            compiler: gcc
+          - os: ubuntu-latest
+            compiler: msvc
+          - os: ubuntu-latest
+            compiler: mingw
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Install dependencies
+      - name: Install build tools
+        shell: bash
+        run: |
+          if [[ "${{ matrix.os }}" == "ubuntu-latest" ]] && [[ "${{ matrix.compiler }}" == "gcc" ]]; then
+            sudo apt-get update
+            sudo apt-get install -y ninja-build cmake build-essential gcc g++ python3 python3-pip
+          elif [[ "${{ matrix.os }}" == "windows-latest" ]] && [[ "${{ matrix.compiler }}" == "mingw" ]]; then
+            echo "Installing Chocolatey..."
+            powershell -NoProfile -ExecutionPolicy Bypass -Command "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
+
+            choco install ninja cmake python --confirm
+
+            curl -L -o msys2-installer.exe https://github.com/msys2/msys2-installer/releases/download/nightly-x86_64/msys2-x86_64-latest.exe
+            msys2-installer.exe --confirm-command --accept-messages --root C:/msys64
+
+            export PATH="/c/msys64/usr/bin:$PATH"
+            pacman -Syu --noconfirm
+            pacman -Su --noconfirm
+            pacman -S --noconfirm mingw-w64-x86_64-gcc mingw-w64-x86_64-python
+          elif [[ "${{ matrix.os }}" == "windows-latest" ]] && [[ "${{ matrix.compiler }}" == "msvc" ]]; then
+            echo "Installing Chocolatey..."
+            powershell -NoProfile -ExecutionPolicy Bypass -Command "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
+
+            choco install ninja cmake python --confirm
+
+            choco install visualstudio2022buildtools --confirm
+            cmd //c "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Auxiliary\\Build\\vcvars64.bat"
+          fi
+
+
+      # Step 3: Configure the build
+      - name: Configure build
+        shell: bash
+        run: |
+          chmod +x configure.sh
+          ./configure.sh
+
+      # Step 4: Build the project
+      - name: Build DLL
+        shell: bash
+        run: |
+          chmod +x build.sh
+          ./build.sh
+
+      # Step 5: Upload the built DLL
+      - name: Upload DLL artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: WsprEncodedPython-${{ matrix.os }}-${{ matrix.compiler }}
+          path: ./build/WsprEncodedPython.*
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Download all build artifacts
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: ./artifacts
+
+      # Step 3: Add DLLs to the repository
+      - name: Commit and push DLLs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          mkdir -p ./prebuilt
+          echo "artifacts contents:"
+          find ./artifacts
+          echo "prebuilt contents:"
+          find ./prebuilt
+          cp -r ./artifacts/*/* ./prebuilt/
+          git add prebuilt
+          echo "pre-commit"
+          git commit -m "Add prebuilt DLLs for all builds" || echo "=== No changes to commit ==="
+          echo "pre-push"
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          git push origin main
+

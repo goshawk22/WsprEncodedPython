@@ -20,7 +20,7 @@ jobs:
       matrix:
         # os: [windows-latest, ubuntu-latest]
         # compiler: [msvc64, gcc_mingw, gcc]
-        os: [ubuntu-latest]
+        os: [windows-latest]
         compiler: [gcc_mingw]
         exclude:
           - os: windows-latest

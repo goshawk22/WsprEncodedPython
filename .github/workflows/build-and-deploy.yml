@@ -102,5 +102,10 @@ jobs:
 
           git add prebuilt
           git commit -m "Add prebuilt DLLs for all builds" || echo "=== No changes to commit ==="
-          git push
+          
+          # for whatever reason, the built files don't actually appear to work, and I'm not
+          # going to spend any more time on it for now. Just don't push, so no impact to repo,
+          # and it will still be worthwhile seeing that it builds on these platforms.
+
+          # git push
 

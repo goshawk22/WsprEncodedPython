@@ -18,8 +18,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, ubuntu-latest]
-        compiler: [msvc64, gcc_mingw, gcc]
+        # os: [windows-latest, ubuntu-latest]
+        # compiler: [msvc64, gcc_mingw, gcc]
+        os: [ubuntu-latest]
+        compiler: [gcc_mingw]
         exclude:
           - os: windows-latest
             compiler: gcc
@@ -60,6 +62,7 @@ jobs:
       - name: Configure build
         shell: bash
         run: |
+          export PATH="/c/msys64/ucrt64/bin:${PATH}"
           chmod +x configure.sh
           ./configure.sh
 

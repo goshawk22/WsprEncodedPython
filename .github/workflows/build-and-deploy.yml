@@ -63,6 +63,7 @@ jobs:
         shell: bash
         run: |
           export PATH="/c/msys64/ucrt64/bin:${PATH}"
+          CXX=/c/msys64/ucrt64/bin/g++
           chmod +x configure.sh
           ./configure.sh
 

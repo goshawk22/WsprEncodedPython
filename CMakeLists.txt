@@ -55,6 +55,7 @@ FetchContent_MakeAvailable(pybind11)
 pybind11_add_module(WsprEncodedPython WsprEncodedPython.cpp)
 target_link_libraries(WsprEncodedPython PRIVATE
     WsprEncoded
+    ${Python3_LIBRARIES}
 )
 target_compile_definitions(WsprEncodedPython PRIVATE
     Py_ENABLE_SHARED

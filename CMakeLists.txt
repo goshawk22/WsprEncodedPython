@@ -17,7 +17,7 @@ include(FetchContent)
 FetchContent_Declare(
     WsprEncoded
     GIT_REPOSITORY https://github.com/traquito/WsprEncoded.git
-    GIT_TAG        4.2.4
+    GIT_TAG        4.2.6
 )
 FetchContent_MakeAvailable(WsprEncoded)
 

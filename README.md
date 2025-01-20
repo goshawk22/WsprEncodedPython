@@ -2,17 +2,7 @@
 
 This is the python bindings for the [WsprEncoded](https://github.com/traquito/WsprEncoded) library.
 
-Pre-built libraries available in the prebuilt folder.
-
-If you don't find a pre-built library suitable for your system, raise an [issue](https://github.com/traquito/WsprEncodedPython/issues) and an attempt will be made to make one available.
-
-Install directory -- put in the directory printed when running this command:
-```
-python -m site --user-site
-```
-
-Note -- The pre-built binaries have not been tested across all systems and are provided as a best-effort attempt to avoid you needing to build the library yourself.
-
+[![Build DLL for Windows and Linux](https://github.com/traquito/WsprEncodedPython/actions/workflows/build-and-deploy.yml/badge.svg)](https://github.com/traquito/WsprEncodedPython/actions/workflows/build-and-deploy.yml)
 
 To build the python extension yourself:
 
@@ -27,8 +17,9 @@ cd WsprEncodedPython
 ./install.sh
 
 # Test
-./test_wspr_encode.py
-./test_wspr_decode.py
+./test_wspr_encode_user_defined.py
+./test_wspr_decode_user_defined.py
+./test_wspr_decode_common.py
 ```
 
 Building yourself depends on [Python](https://www.python.org/downloads/), [CMake](https://cmake.org/download/), and [Ninja](https://ninja-build.org/) being installed.

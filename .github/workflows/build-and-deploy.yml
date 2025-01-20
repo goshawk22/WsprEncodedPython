@@ -19,12 +19,14 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest]
-        compiler: [msvc, gcc_mingw, gcc]
+        compiler: [msvc32, msvc64, gcc_mingw, gcc]
         exclude:
           - os: windows-latest
             compiler: gcc
           - os: ubuntu-latest
-            compiler: msvc
+            compiler: msvc32
+          - os: ubuntu-latest
+            compiler: msvc64
           - os: ubuntu-latest
             compiler: gcc_mingw
     steps:
@@ -50,12 +52,15 @@ jobs:
             pacman -S --noconfirm mingw-w64-x86_64-gcc mingw-w64-x86_64-python
 
             choco install ninja cmake python --confirm
-          elif [[ "${{ matrix.os }}" == "windows-latest" ]] && [[ "${{ matrix.compiler }}" == "msvc" ]]; then
+          elif [[ "${{ matrix.os }}" == "windows-latest" ]] && [[ "${{ matrix.compiler }}" == "msvc32" ]]; then
+            cmd /C "C:/Program Files (x86)/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars32.bat"
+
+            choco install ninja cmake python --confirm
+          elif [[ "${{ matrix.os }}" == "windows-latest" ]] && [[ "${{ matrix.compiler }}" == "msvc32" ]]; then
             cmd /C "C:/Program Files (x86)/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
 
             choco install ninja cmake python --confirm
           fi
-
 
       # Step 3: Configure the build
       - name: Configure build

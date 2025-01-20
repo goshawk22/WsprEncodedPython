@@ -91,17 +91,15 @@ jobs:
 
       # Step 3: Add DLLs to the repository
       - name: Commit and push DLLs
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          echo "https://github-actions[bot]:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+
           mkdir -p ./prebuilt
-          find ./artifacts
-          find ./prebuilt
           cp -r ./artifacts/* ./prebuilt/
+
           git add prebuilt
           git commit -m "Add prebuilt DLLs for all builds" || echo "=== No changes to commit ==="
-          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-          git push origin main
+          git push
 

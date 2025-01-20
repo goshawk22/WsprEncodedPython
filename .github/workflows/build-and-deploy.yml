@@ -39,6 +39,7 @@ jobs:
           elif [[ "${{ matrix.os }}" == "windows-latest" ]] && [[ "${{ matrix.compiler }}" == "mingw" ]]; then
             choco install ninja cmake python --confirm
 
+            rm -rf /c/msys64
             curl -L -o msys2-installer.exe https://github.com/msys2/msys2-installer/releases/download/nightly-x86_64/msys2-x86_64-latest.exe
             ./msys2-installer.exe in --confirm-command --accept-messages --accept-licenses --root C:/msys64
 
@@ -50,7 +51,7 @@ jobs:
             choco install ninja cmake python --confirm
 
             choco install visualstudio2022buildtools --confirm
-            cmd //c "C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Auxiliary\\Build\\vcvars64.bat"
+            cmd //c "C:\\Program\ Files\ (x86)\\Microsoft\ Visual\ Studio\\2022\\BuildTools\\VC\\Auxiliary\\Build\\vcvars64.bat"
           fi
 
 

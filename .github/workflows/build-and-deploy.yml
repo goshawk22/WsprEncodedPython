@@ -56,7 +56,7 @@ jobs:
             cmd /C "C:/Program Files (x86)/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars32.bat"
 
             choco install ninja cmake python --confirm
-          elif [[ "${{ matrix.os }}" == "windows-latest" ]] && [[ "${{ matrix.compiler }}" == "msvc32" ]]; then
+          elif [[ "${{ matrix.os }}" == "windows-latest" ]] && [[ "${{ matrix.compiler }}" == "msvc64" ]]; then
             cmd /C "C:/Program Files (x86)/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
 
             choco install ninja cmake python --confirm

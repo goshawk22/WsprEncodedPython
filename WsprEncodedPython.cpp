@@ -11,6 +11,41 @@ PYBIND11_MODULE(WsprEncodedPython, m) {
 
 
     /////////////////////////////////////////////////////////////////
+    // WsprMessageTelemetryBasic
+    /////////////////////////////////////////////////////////////////
+
+    py::class_<WsprMessageTelemetryBasic> msgBasic(m, "WsprMessageTelemetryBasic");
+
+    msgBasic.def(py::init<>());
+
+    msgBasic.def("Reset",                 &WsprMessageTelemetryBasic::Reset);
+    msgBasic.def("SetCallsign",           &WsprMessageTelemetryBasic::SetCallsign);
+    msgBasic.def("GetCallsign",           &WsprMessageTelemetryBasic::GetCallsign);
+    msgBasic.def("SetGrid4",              &WsprMessageTelemetryBasic::SetGrid4);
+    msgBasic.def("GetGrid4",              &WsprMessageTelemetryBasic::GetGrid4);
+    msgBasic.def("SetPowerDbm",           &WsprMessageTelemetryBasic::SetPowerDbm);
+    msgBasic.def("GetPowerDbm",           &WsprMessageTelemetryBasic::GetPowerDbm);
+
+    msgBasic.def("SetGrid56",             &WsprMessageTelemetryBasic::SetGrid56);
+    msgBasic.def("GetGrid56",             &WsprMessageTelemetryBasic::GetGrid56);
+    msgBasic.def("SetAltitudeMeters",     &WsprMessageTelemetryBasic::SetAltitudeMeters);
+    msgBasic.def("GetAltitudeMeters",     &WsprMessageTelemetryBasic::GetAltitudeMeters);
+    msgBasic.def("SetTemperatureCelsius", &WsprMessageTelemetryBasic::SetTemperatureCelsius);
+    msgBasic.def("GetTemperatureCelsius", &WsprMessageTelemetryBasic::GetTemperatureCelsius);
+    msgBasic.def("SetVoltageVolts",       &WsprMessageTelemetryBasic::SetVoltageVolts);
+    msgBasic.def("GetVoltageVolts",       &WsprMessageTelemetryBasic::GetVoltageVolts);
+    msgBasic.def("SetSpeedKnots",         &WsprMessageTelemetryBasic::SetSpeedKnots);
+    msgBasic.def("GetSpeedKnots",         &WsprMessageTelemetryBasic::GetSpeedKnots);
+    msgBasic.def("SetGpsIsValid",         &WsprMessageTelemetryBasic::SetGpsIsValid);
+    msgBasic.def("GetGpsIsValid",         &WsprMessageTelemetryBasic::GetGpsIsValid);
+    
+    msgBasic.def("SetId13",               &WsprMessageTelemetryBasic::SetId13);
+    msgBasic.def("GetId13",               &WsprMessageTelemetryBasic::GetId13);
+    msgBasic.def("Encode",                &WsprMessageTelemetryBasic::Encode);
+    msgBasic.def("Decode",                &WsprMessageTelemetryBasic::Decode);
+
+
+    /////////////////////////////////////////////////////////////////
     // WsprMessageTelemetryExtendedCommon
     /////////////////////////////////////////////////////////////////
 
